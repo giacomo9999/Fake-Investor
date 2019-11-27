@@ -12,14 +12,21 @@ const mongoURL =
   "mongodb+srv://Jim:tKQbT97yUkJkmxt@cluster0-bdfjd.mongodb.net/test?retryWrites=true&w=majority";
 
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoURL, { useNewUrlParser: true }).then(
-  () => {
-    console.log("Database is connected");
-  },
-  err => {
-    console.log("Cannot connect to database " + err);
-  }
-);
+
+mongoose
+  .connect(mongoURL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true
+  })
+  .then(
+    () => {
+      console.log("Database is connected");
+    },
+    err => {
+      console.log("Cannot connect to database " + err);
+    }
+  );
 
 const mockResponse = {
   foo: "bar",
