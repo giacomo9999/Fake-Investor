@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require("path");
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
@@ -11,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     filename: "[name].js"
   }, // NEW Ends
-  plugins: [htmlPlugin],
+  plugins: [htmlPlugin, new CleanWebpackPlugin()],
   module: {
     rules: [
       {
@@ -20,6 +21,10 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
+      },
+      {
+        test: /\.s?css$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
       }
     ]
   }
