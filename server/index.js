@@ -3,14 +3,15 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require('dotenv').config()
+require("dotenv").config();
 
 const app = express();
+const stock = require("../routes/stock");
+
 const port = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, "../dist");
 const HTML_FILE = path.join(DIST_DIR, "index.html");
 const mongoURL = process.env.MONGO_CONN;
-console.log(mongoURL);
 
 mongoose.Promise = global.Promise;
 
@@ -38,6 +39,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(DIST_DIR));
+
+app.use("/api/stock", stock);
 
 app.get("/api", (req, res) => {
   res.send(mockResponse);
