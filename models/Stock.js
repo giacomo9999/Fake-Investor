@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 let Stock = new Schema(
   {
     stock_symbol: { type: String },
-    investment_data: { numOfShares: Number }
+    num_of_shares: { type: Number }
   },
   { collection: "user_data" }
 );
