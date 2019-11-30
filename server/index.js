@@ -3,13 +3,14 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+require('dotenv').config()
 
 const app = express();
 const port = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, "../dist");
 const HTML_FILE = path.join(DIST_DIR, "index.html");
-const mongoURL =
-  "mongodb+srv://Jim:tKQbT97yUkJkmxt@cluster0-bdfjd.mongodb.net/test?retryWrites=true&w=majority";
+const mongoURL = process.env.MONGO_CONN;
+console.log(mongoURL);
 
 mongoose.Promise = global.Promise;
 
