@@ -7,6 +7,7 @@ const Stock = require("../models/Stock.js");
 router.get("/", (req, res, next) => {
   //   res.send("Router here.");
   Stock.find((err, stocks) => {
+    console.log("Back end getting stocks from DB...", stocks);
     if (err) return next(err);
     res.json(stocks);
   });

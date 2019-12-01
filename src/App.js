@@ -12,13 +12,24 @@ class App extends Component {
     super();
 
     this.state = {
-      stocks: [],
-      term: null,
-      value: ""
+      stocks: []
     };
 
-    this.handleClick = this.handleClick.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    console.log("App component mounted.");
+    axios
+      .get("http://localhost:3000/api/stock")
+      .then(res => {
+        console.log("Res.data: ", res.data);
+        this.setState({ stocks: res.data });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   handleChange(e) {
@@ -27,56 +38,56 @@ class App extends Component {
     });
   }
 
-  handleClick(e) {
-    if (e) e.preventDefault();
-    this.setState({
-      value: "",
-      term: this.state.value
-    });
+  // handleClick(e) {
+  //   if (e) e.preventDefault();
+  //   this.setState({
+  //     value: "",
+  //     term: this.state.value
+  //   });
 
-    let term = this.state.value;
-    // const key = process.env.ALPHA_V;
-    // const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=${key}`;
-    const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=RI18ACHK3TCCCQXJ`;
+  //   let term = this.state.value;
+  //   // const key = process.env.ALPHA_V;
+  //   // const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=${key}`;
+  //   const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=RI18ACHK3TCCCQXJ`;
 
-    axios
-      .get(url)
-      .then(res => {
-        console.log("Res.data: ", res.data);
-        let stocks = _.flattenDeep(
-          Array.from(res.data["Stock Quotes"]).map(stock => [
-            {
-              symbol: stock["1. symbol"],
-              price: stock["2. price"],
-              volume: stock["3. volume"],
-              timestamp: stock["4. timestamp"]
-            }
-          ])
-        );
-        console.log("Stocks: ", stocks);
-        this.setState((state, props) => {
-          return {
-            ...state,
-            stocks
-          };
-        });
-      })
-      .catch(error => console.log(error));
-  }
+  //   axios
+  //     .get(url)
+  //     .then(res => {
+  //       console.log("Res.data: ", res.data);
+  //       let stocks = _.flattenDeep(
+  //         Array.from(res.data["Stock Quotes"]).map(stock => [
+  //           {
+  //             symbol: stock["1. symbol"],
+  //             price: stock["2. price"],
+  //             volume: stock["3. volume"],
+  //             timestamp: stock["4. timestamp"]
+  //           }
+  //         ])
+  //       );
+  //       console.log("Stocks: ", stocks);
+  //       this.setState((state, props) => {
+  //         return {
+  //           ...state,
+  //           stocks
+  //         };
+  //       });
+  //     })
+  //     .catch(error => console.log(error));
+  // }
 
   render() {
     let stocks = this.state.stocks;
-    const value = this.state.value;
+    // const value = this.state.value;
 
     return (
       <div className="App">
-        <h1 className="App__Title">Stock Search</h1>
-        <SearchBar
+        <h1 className="App__Title">FakeInvestor</h1>
+        {/* <SearchBar
           value={value}
           onChange={this.handleChange}
           onClick={this.handleClick}
         />
-        <StockList stockItems={this.state.stocks} />
+        <StockList stockItems={this.state.stocks} /> */}
       </div>
     );
   }
