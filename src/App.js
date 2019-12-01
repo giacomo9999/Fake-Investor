@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import axios from "axios";
-require("dotenv").config();
+// require("dotenv").config();
 
 import SearchBar from "./components/SearchBar/SearchBar";
 import StockList from "./components/StockList/StockList";
@@ -35,8 +35,9 @@ class App extends Component {
     });
 
     let term = this.state.value;
-    const key = process.env.ALPHA_V;
-    const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=${key}`;
+    // const key = process.env.ALPHA_V;
+    // const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=${key}`;
+    const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${term}&apikey=RI18ACHK3TCCCQXJ`;
 
     axios
       .get(url)

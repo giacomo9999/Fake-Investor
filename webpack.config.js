@@ -1,5 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
 const htmlPlugin = new HtmlWebPackPlugin({
   template: "./src/index.html",
@@ -8,10 +8,9 @@ const htmlPlugin = new HtmlWebPackPlugin({
 module.exports = {
   entry: "./src/index.js",
   output: {
-    // NEW
     path: path.join(__dirname, "dist"),
     filename: "[name].js"
-  }, // NEW Ends
+  },
   plugins: [htmlPlugin, new CleanWebpackPlugin()],
   module: {
     rules: [
