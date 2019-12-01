@@ -8,7 +8,12 @@ const axios = require("axios");
 router.get("/", (req, res, next) => {
   //   res.send("Router here.");
   Stock.find((err, stocks) => {
-    // console.log("Back end getting stocks from DB...", stocks);
+    console.log("Back end getting stocks from DB...", stocks);
+    const newStockObj = {};
+    stocks.forEach(entry => {
+      newStockObj[entry.stock_symbol] = { shares: entry.num_of_shares };
+    });
+
     const pricePromisesArray = [];
     const key = process.env.ALPHA_V;
 
@@ -17,12 +22,20 @@ router.get("/", (req, res, next) => {
       pricePromisesArray.push(axios.get(url));
     }
 
-    Promise.all(pricePromisesArray).then(values => {
-      console.log(
-        "Values[0].data------------------",
-        values[0].data["Stock Quotes"][0]["2. price"]
-      );
-    });
+    Promise.all(pricePromisesArray)
+      .then(values =>
+        values.forEach(entry => {
+          console.log(
+            "Symbol and price: ",
+            entry.data["Stock Quotes"][0]["1. symbol"],
+            entry.data["Stock Quotes"][0]["2. price"]
+          );
+          //   console.log(newStockObj[entry.data["Stock Quotes"][0]["1. symbol"]]);
+          newStockObj[entry.data["Stock Quotes"][0]["1. symbol"]].price =
+            entry.data["Stock Quotes"][0]["2. price"];
+        })
+      )
+      .then(console.log("New Stock Obj: ", newStockObj));
 
     if (err) return next(err);
     res.json(stocks);
