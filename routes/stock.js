@@ -8,21 +8,31 @@ const axios = require("axios");
 router.get("/", (req, res, next) => {
   //   res.send("Router here.");
   Stock.find((err, stocks) => {
-    console.log("Back end getting stocks from DB...", stocks);
+    // console.log("Back end getting stocks from DB...", stocks);
     const pricePromisesArray = [];
     const key = process.env.ALPHA_V;
 
     for (let i = 0; i < stocks.length; i++) {
       const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${stocks[i].stock_symbol}&apikey=${key}`;
-      axios.get(url).then(res => {
-        console.log("Res.data: ", res.data["Stock Quotes"]);
-        stocks[i].price = res.data["Stock Quotes"][0]["2. price"];
-      });
+      pricePromisesArray.push(axios.get(url));
     }
+
+    Promise.all(pricePromisesArray).then(values => {
+      console.log(
+        "Values[0].data------------------",
+        values[0].data["Stock Quotes"][0]["2. price"]
+      );
+    });
+
     if (err) return next(err);
     res.json(stocks);
   });
 });
+
+// .then(res => {
+//     console.log("Res.data: ", res.data["Stock Quotes"]);
+//     stocks[i].price = res.data["Stock Quotes"][0]["2. price"];
+//   });
 
 // Save stock
 router.post("/", function(req, res, next) {
