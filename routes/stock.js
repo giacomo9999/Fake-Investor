@@ -2,12 +2,23 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Stock = require("../models/Stock.js");
+const axios = require("axios");
 
 // Get all stocks
 router.get("/", (req, res, next) => {
   //   res.send("Router here.");
   Stock.find((err, stocks) => {
     console.log("Back end getting stocks from DB...", stocks);
+    const pricePromisesArray = [];
+    const key = process.env.ALPHA_V;
+
+    for (let i = 0; i < stocks.length; i++) {
+      const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${stocks[i].stock_symbol}&apikey=${key}`;
+      axios.get(url).then(res => {
+        console.log("Res.data: ", res.data["Stock Quotes"]);
+        stocks[i].price = res.data["Stock Quotes"][0]["2. price"];
+      });
+    }
     if (err) return next(err);
     res.json(stocks);
   });
