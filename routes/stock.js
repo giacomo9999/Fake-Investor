@@ -19,26 +19,22 @@ router.get("/", (req, res, next) => {
 
     for (let i = 0; i < stocks.length; i++) {
       const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${stocks[i].stock_symbol}&apikey=${key}`;
-      pricePromisesArray.push(axios.get(url));
+      pricePromisesArray.push(
+        axios
+          .get(url)
+          .then(
+            entry =>
+              (newStockObj[
+                entry.data["Stock Quotes"][0]["1. symbol"]
+              ].price = Number(entry.data["Stock Quotes"][0]["2. price"]))
+          )
+      );
     }
 
-    Promise.all(pricePromisesArray)
-      .then(values =>
-        values.forEach(entry => {
-          console.log(
-            "Symbol and price: ",
-            entry.data["Stock Quotes"][0]["1. symbol"],
-            entry.data["Stock Quotes"][0]["2. price"]
-          );
-          //   console.log(newStockObj[entry.data["Stock Quotes"][0]["1. symbol"]]);
-          newStockObj[entry.data["Stock Quotes"][0]["1. symbol"]].price =
-            entry.data["Stock Quotes"][0]["2. price"];
-        })
-      )
-      .then(console.log("New Stock Obj: ", newStockObj));
+    Promise.all(pricePromisesArray).then(() => console.log(newStockObj));
 
     if (err) return next(err);
-    res.json(stocks);
+    res.json(newStockObj);
   });
 });
 
