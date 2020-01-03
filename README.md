@@ -1,0 +1,1 @@
+This is the repo for the FakeInvestor website code.  It uses a React frontend to query the AlphaVantage database of stock prices and get prices for an imaginary portfolio of user-selected stocks, which is maintained via a Node Express backend which connects to a MongoDB server.  
